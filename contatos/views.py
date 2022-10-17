@@ -9,7 +9,8 @@ from django.http import Http404
 
 
 def index(request):
-    contatos = Contato.objects.all()
+
+    contatos = Contato.objects.order_by('id')
     paginator = Paginator(contatos, 2)
     page = request.GET.get('p')
     contatos = paginator.get_page(page)
