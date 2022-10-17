@@ -16,7 +16,7 @@
     <div class="row">
       <div class="col-lg-12">
         <br><br>
-        <form method="get" action="">
+        <form method="get" action="{%url 'busca' %}">
           <div class="form-group row">
             <div class="col-12">
               <input
@@ -24,7 +24,7 @@
               type="text"
               id="search-input"
               placeholder="Digite sua pesquisa"
-              name="busca">
+              name="termo">
         
         {% block conteudo %}{% endblock conteudo %}
       </div>
