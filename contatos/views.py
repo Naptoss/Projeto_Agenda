@@ -10,7 +10,9 @@ from django.http import Http404
 
 def index(request):
 
-    contatos = Contato.objects.order_by('id')
+    contatos = Contato.objects.order_by('id').filter(
+        mostrar=True
+    )
     paginator = Paginator(contatos, 2)
     page = request.GET.get('p')
     contatos = paginator.get_page(page)
