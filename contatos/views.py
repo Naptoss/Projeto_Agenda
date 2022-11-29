@@ -4,6 +4,8 @@ from .models import Contato
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.http import Http404
+from django.db.models import Q, Value
+from django.db.models.functions import Concat
 
 # Create your views here.
 
@@ -37,10 +39,18 @@ def ver_contato(request, contato_id):
 
 
 def busca(request):
-    contatos = Contato.objects.order_by('id').filter(
-        mostrar=True
+    termo = request.GET.get('termo')
+    campos = Concat('nome', Value(' '), 'sobrenome')
+    # aqui ele concatena os valores para unir o nome e o sobrenome
+
+    contatos = Contato.objects.annotate(
+        nome_completo=campos
+    ).filter(
+        Q(nome_completo__icontains=termo) | Q(telefone__icontains=termo)
     )
-    paginator = Paginator(contatos, 2)
+
+    print(contatos.query)
+    paginator = Paginator(contatos, 20)
 
     page = request.GET.get('p')
     contatos = paginator.get_page(page)
