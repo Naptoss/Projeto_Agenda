@@ -39,9 +39,13 @@ def ver_contato(request, contato_id):
 
 
 def busca(request):
+
     termo = request.GET.get('termo')
     campos = Concat('nome', Value(' '), 'sobrenome')
     # aqui ele concatena os valores para unir o nome e o sobrenome
+
+    if termo is None or not termo:
+        raise Http404()
 
     contatos = Contato.objects.annotate(
         nome_completo=campos
@@ -49,8 +53,7 @@ def busca(request):
         Q(nome_completo__icontains=termo) | Q(telefone__icontains=termo)
     )
 
-    print(contatos.query)
-    paginator = Paginator(contatos, 20)
+    paginator = Paginator(contatos, 2)
 
     page = request.GET.get('p')
     contatos = paginator.get_page(page)
